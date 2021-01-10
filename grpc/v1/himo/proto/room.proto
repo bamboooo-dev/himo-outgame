@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package himo.v1;
+
+option go_package = "github.com/bamboooo-dev/himo/pkg/grpc/v1/himo/proto";
+
+service Room {
+    rpc GetContent (ContentRequest) returns (ContentResponse) {}
+}
+
+message ContentRequest {
+    uint64 id = 1;
+}
+
+message ContentResponse {
+    repeated JournalHistory histories = 1;
+}
+
+message JournalHistory{
+    uint64 id = 1;
+    bytes content = 2;
+}
