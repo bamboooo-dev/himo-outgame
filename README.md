@@ -5,6 +5,12 @@
 - Go: 1.15.6
 - protoc: >= 3.14.0
 
+## gRPC 関連のツールをインストール
+
+```
+make install-grpc
+```
+
 ## build
 
 ```
@@ -16,7 +22,7 @@ make build
 ```
 ├── README.md
 ├── cmd
-│   └── api
+│   └── outgame
 │       └── main.go
 ├── docs
 ├── go.mod
