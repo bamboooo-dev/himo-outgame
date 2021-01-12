@@ -13,10 +13,10 @@ message ContentRequest {
 }
 
 message ContentResponse {
-    repeated JournalHistory histories = 1;
+    Table table = 1;
 }
 
-message JournalHistory{
+message Table{
     uint64 id = 1;
-    bytes content = 2;
+    string name = 2;
 }
