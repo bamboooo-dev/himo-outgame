@@ -24,4 +24,5 @@ WORKDIR /himo-outgame
 COPY ./entry-point.sh ./entry-point.sh
 COPY --from=go_build /himo-outgame/bin/outgame ./bin/
 
+RUN chmod 755 ./entry-point.sh
 ENTRYPOINT [ "./entry-point.sh" ]

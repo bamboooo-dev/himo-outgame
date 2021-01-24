@@ -28,6 +28,7 @@ func main() {
 		sugar.Error(wrapErr)
 		return
 	}
+	sugar.Info("started to listen gRPC :5502")
 
 	server := grpc.NewServer()
 
