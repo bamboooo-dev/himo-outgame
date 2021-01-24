@@ -5,7 +5,7 @@ RUN apk --update --no-cache add git build-base openssh curl nmap mysql-client tz
 
 ENV TZ Asia/Tokyo
 
-RUN RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
 WORKDIR /himo-outgame
 

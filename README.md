@@ -31,6 +31,18 @@ docker build -t himo-outgame .
 docker run -d -p 5502:5502 himo-outgame bin/outgame
 ```
 
+### docker-compose による開発環境
+
+`outgame-grpcui` サービスが `outgame:5502` に接続確認するので、順番に立ち上げる必要がある  
+`fullstorydev/grpcui` イメージには sh すら入ってないので `wait-for-it.sh` がすぐ使えず、とりあえず妥協
+
+```
+docker-compose up outgame
+docker-compose up outgame-grpcui
+```
+
+http://localhost:10080 で gRPC の接続テストができる
+
 ## gRPC 接続の GUI による確認
 
 ```
