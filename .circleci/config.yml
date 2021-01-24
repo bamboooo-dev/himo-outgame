@@ -18,7 +18,7 @@ jobs:
             - "33:dc:2d:6c:92:1d:07:da:26:87:c6:ff:26:ec:1d:3c"
       - run:
           name: Create docker context
-          command: docker context"
+          command: docker context
           environment:
             SSH_USERNAME: opc
             SSH_IP: 168.138.198.236
