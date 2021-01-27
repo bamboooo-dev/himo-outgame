@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  outgame:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "./bin/outgame"
+    restart: always
+    volumes:
+      - .:/himo-outgame
+      - bin:/himo-outgame/bin
+  outgame-grpcui:
+    depends_on:
+      - outgame
+    image: fullstorydev/grpcui
+    command: "-plaintext outgame:5502"
+    restart: always
+    ports:
+      - "10080:8080"
+volumes:
+  bin:
