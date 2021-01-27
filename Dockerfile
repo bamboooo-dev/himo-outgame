@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY . /himo-outgame
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
-  make 
+  make
 
 FROM alpine:3.12.3
 
