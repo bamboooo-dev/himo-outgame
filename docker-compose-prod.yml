@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  outgame:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "./bin/outgame"
+    restart: always
+    volumes:
+      - .:/himo-outgame
+      - bin:/himo-outgame/bin
+volumes:
+  bin:
