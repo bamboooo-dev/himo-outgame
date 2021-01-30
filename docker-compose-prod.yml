@@ -7,8 +7,3 @@ services:
       dockerfile: Dockerfile
     command: "./bin/outgame"
     restart: always
-    volumes:
-      - .:/himo-outgame
-      - bin:/himo-outgame/bin
-volumes:
-  bin:
