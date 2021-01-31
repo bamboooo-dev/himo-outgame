@@ -30,3 +30,20 @@ jobs:
           push: true
           tags: |
             bamboooo/himo-outgame:latest
+
+  deploy:
+    needs: build-image
+
+    name: Deploy to dev server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to dev
+        run: |
+          echo "$SSH_KEY" > secret_key
+          chmod 600 secret_key
+          ssh -o StrictHostKeyChecking=no ${ORACLE_USER}@${ORACLE_HOST} -i secret_key "cd ~/himo-outgame && git pull origin main && docker-compose stop && docker-compose -f docker-compose-prod.yml up --build -d"
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          ORACLE_USER: ${{ secrets.ORACLE_USER }}
+          ORACLE_HOST: ${{ secrets.ORACLE_HOST }}
