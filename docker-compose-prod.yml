@@ -5,3 +5,5 @@ services:
     image: bamboooo/himo-outgame
     command: "./bin/outgame"
     restart: always
+    ports:
+      - "5502:5502"
