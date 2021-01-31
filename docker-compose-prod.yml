@@ -2,8 +2,6 @@ version: "3.8"
 
 services:
   outgame:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: bamboooo/himo-outgame
     command: "./bin/outgame"
     restart: always
