@@ -10,6 +10,8 @@ services:
     volumes:
       - .:/himo-outgame
       - bin:/himo-outgame/bin
+    ports:
+      - "5502:5502"
   outgame-grpcui:
     depends_on:
       - outgame
