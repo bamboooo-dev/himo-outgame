@@ -30,5 +30,4 @@ message SignUpRequest {
 }
 
 message SignUpResponse {
-    string access_token = 1;
 }

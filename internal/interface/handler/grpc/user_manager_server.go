@@ -9,6 +9,8 @@ import (
 	"github.com/bamboooo-dev/himo-outgame/pkg/grpcmiddleware"
 	"github.com/go-gorp/gorp"
 	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 // UserManagerServer gRPC サーバーの実装
@@ -36,9 +38,10 @@ func (s UserManagerServer) SignUp(ctx context.Context, req *pb.SignUpRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	ret := pb.SignUpResponse{
-		AccessToken: accessToken,
-	}
+	// create and send header
+	header := metadata.Pairs("access-token", accessToken)
+	grpc.SendHeader(ctx, header)
+	ret := pb.SignUpResponse{}
 	return &ret, nil
 }
 
