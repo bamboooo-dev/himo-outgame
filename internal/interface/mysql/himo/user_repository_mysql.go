@@ -29,6 +29,8 @@ func (u UserRepositoryMysql) Create(ctx context.Context, db *gorp.DbMap, user mo
 		return model.User{}, err
 	}
 
-	user = model.User{Nickname: userDAO.Nickname}
+	user = model.User{
+		ID:       userDAO.ID,
+		Nickname: userDAO.Nickname}
 	return user, nil
 }
