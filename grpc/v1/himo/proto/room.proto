@@ -20,3 +20,15 @@ message Table{
     uint64 id = 1;
     string name = 2;
 }
+
+service UserManager {
+    rpc SignUp (SignUpRequest) returns (SignUpResponse) {}
+}
+
+message SignUpRequest {
+    string nickname = 1;
+}
+
+message SignUpResponse {
+    string access_token = 1;
+}
