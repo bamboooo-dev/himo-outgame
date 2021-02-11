@@ -6,6 +6,7 @@ import (
 	"github.com/bamboooo-dev/himo-outgame/internal/registry"
 	"github.com/bamboooo-dev/himo-outgame/internal/usecase/interactor"
 	pb "github.com/bamboooo-dev/himo-outgame/pkg/grpc/v1/himo/proto"
+	"github.com/bamboooo-dev/himo-outgame/pkg/grpcmiddleware"
 	"github.com/go-gorp/gorp"
 	"go.uber.org/zap"
 )
@@ -39,4 +40,18 @@ func (s UserManagerServer) SignUp(ctx context.Context, req *pb.SignUpRequest) (*
 		AccessToken: accessToken,
 	}
 	return &ret, nil
+}
+
+// AuthFuncOverride is to handle authentication
+func (s UserManagerServer) AuthFuncOverride(ctx context.Context, fullMethodName string) (context.Context, error) {
+	if fullMethodName == "/himo.v1.UserManager/SignUp" {
+		return ctx, nil
+	}
+
+	ctx, err := grpcmiddleware.Authenticate(ctx)
+	if err != nil {
+		return ctx, err
+	}
+
+	return ctx, nil
 }
