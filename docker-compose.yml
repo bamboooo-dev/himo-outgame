@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  db:
+    restart: always
+    image: mysql:8.0
+    volumes:
+      - ./db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    container_name: himo_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 4306:3306
   outgame:
     build:
       context: .
