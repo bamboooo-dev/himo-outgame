@@ -7,6 +7,7 @@ import (
 	"github.com/bamboooo-dev/himo-outgame/internal/domain/model"
 	"github.com/bamboooo-dev/himo-outgame/internal/registry"
 	himo_repo "github.com/bamboooo-dev/himo-outgame/internal/usecase/repository/himo"
+	"github.com/bamboooo-dev/himo-outgame/pkg/grpcmiddleware"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-gorp/gorp"
 )
@@ -35,8 +36,9 @@ func (r *RegisterUserInteractor) Call(ctx context.Context, db *gorp.DbMap, nickN
 
 	// TODO: signKey をわからないようにする
 	signKey := []byte("secret")
-	token := jwt.New(jwt.GetSigningMethod("HS256"))
-	token.Claims.(jwt.MapClaims)["userID"] = strconv.Itoa(int(user.ID))
+	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), grpcmiddleware.AuthClaim{
+		UserID: strconv.Itoa(int(user.ID)),
+	})
 	ss, err := token.SignedString(signKey)
 	if err != nil {
 		return "", err
