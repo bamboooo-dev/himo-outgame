@@ -9,7 +9,8 @@ import (
 
 type key int
 
-const stringKey key = iota
+// StringKey は Context に 値を埋め込んだ際の key
+const StringKey key = iota
 
 // AuthClaim は JWT に埋め込む Claim
 type AuthClaim struct {
@@ -32,5 +33,5 @@ func Authenticate(ctx context.Context) (context.Context, error) {
 		return nil, err
 	}
 
-	return context.WithValue(ctx, stringKey, claim.UserID), nil
+	return context.WithValue(ctx, StringKey, claim.UserID), nil
 }
