@@ -34,3 +34,18 @@ func (u UserRepositoryMysql) Create(ctx context.Context, db *gorp.DbMap, user mo
 		Nickname: userDAO.Nickname}
 	return user, nil
 }
+
+// Find finds a user
+func (u UserRepositoryMysql) Find(ctx context.Context, db *gorp.DbMap, id string) (model.User, error) {
+	obj, err := db.Get(dao.User{}, id)
+	if err != nil {
+		return model.User{}, err
+	}
+	userDAO := obj.(*dao.User)
+
+	user := model.User{
+		ID:       userDAO.ID,
+		Nickname: userDAO.Nickname,
+	}
+	return user, nil
+}

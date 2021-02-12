@@ -76,7 +76,7 @@ func main() {
 
 	registry := registry.NewRegistry(cfg, sugar)
 
-	pb.RegisterRoomServer(server, handler.NewRoomServer())
+	pb.RegisterRoomServer(server, handler.NewRoomServer(registry, himoDB))
 	pb.RegisterUserManagerServer(server, handler.NewUserManagerServer(sugar, registry, himoDB))
 	err = server.Serve(lis)
 	if err != nil {
