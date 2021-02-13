@@ -6,6 +6,12 @@ option go_package = "github.com/bamboooo-dev/himo/pkg/grpc/v1/himo/proto";
 
 service ThemeManager {
   rpc Create (ThemeRequest) returns (ThemeResponse) {}
+  rpc List (ListThemeRequest) returns (ListThemeResponse) {}
+}
+
+message Theme {
+  uint32 id = 1;
+  string sentence = 2;
 }
 
 message ThemeRequest {
@@ -16,7 +22,8 @@ message ThemeResponse {
   Theme theme = 1;
 }
 
-message Theme {
-  uint32 id = 1;
-  string sentence = 2;
+message ListThemeRequest {}
+
+message ListThemeResponse {
+  repeated Theme themes = 1;
 }

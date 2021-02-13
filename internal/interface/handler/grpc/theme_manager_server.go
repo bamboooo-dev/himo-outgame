@@ -15,6 +15,7 @@ import (
 type ThemeManagerServer struct {
 	logger  *zap.SugaredLogger
 	creator *interactor.CreateThemeInteractor
+	lister  *interactor.ListThemeInteractor
 	db      *gorp.DbMap
 
 	pb.UnimplementedThemeManagerServer
@@ -25,6 +26,7 @@ func NewThemeManagerServer(l *zap.SugaredLogger, r registry.Registry, db *gorp.D
 	return ThemeManagerServer{
 		logger:  l,
 		creator: interactor.NewCreateThemeInteractor(r),
+		lister:  interactor.NewListThemeInteractor(r),
 		db:      db,
 	}
 }
@@ -44,6 +46,28 @@ func (s ThemeManagerServer) Create(ctx context.Context, req *pb.ThemeRequest) (*
 			Id:       uint32(theme.ID),
 			Sentence: theme.Sentence,
 		},
+	}
+	return &ret, nil
+}
+
+// List gets my themes
+func (s ThemeManagerServer) List(ctx context.Context, req *pb.ListThemeRequest) (*pb.ListThemeResponse, error) {
+
+	userID := ctx.Value(grpcmiddleware.StringKey).(string)
+
+	themes, err := s.lister.Call(ctx, s.db, userID)
+	if err != nil {
+		return nil, err
+	}
+	pbThemes := make([]*pb.Theme, len(themes))
+	for i, theme := range themes {
+		pbThemes[i] = &pb.Theme{
+			Id:       uint32(theme.ID),
+			Sentence: theme.Sentence,
+		}
+	}
+	ret := pb.ListThemeResponse{
+		Themes: pbThemes,
 	}
 	return &ret, nil
 }

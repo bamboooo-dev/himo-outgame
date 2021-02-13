@@ -32,5 +32,11 @@ func (s *ThemeService) Create(ctx context.Context, db *gorp.DbMap, user model.Us
 	return theme, nil
 }
 
-// List は自分が作成したお題を見る
-func (s *ThemeService) List(ctx context.Context, db *gorp.DbMap, user model.User) {}
+// List は自分が作成したお題を取得する
+func (s *ThemeService) List(ctx context.Context, db *gorp.DbMap, user model.User) ([]model.Theme, error) {
+	themes, err := s.themeRepo.FetchByUser(ctx, db, user)
+	if err != nil {
+		return []model.Theme{}, err
+	}
+	return themes, nil
+}

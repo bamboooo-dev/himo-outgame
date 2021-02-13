@@ -18,6 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ThemeManagerClient interface {
 	Create(ctx context.Context, in *ThemeRequest, opts ...grpc.CallOption) (*ThemeResponse, error)
+	List(ctx context.Context, in *ListThemeRequest, opts ...grpc.CallOption) (*ListThemeResponse, error)
 }
 
 type themeManagerClient struct {
@@ -37,11 +38,21 @@ func (c *themeManagerClient) Create(ctx context.Context, in *ThemeRequest, opts 
 	return out, nil
 }
 
+func (c *themeManagerClient) List(ctx context.Context, in *ListThemeRequest, opts ...grpc.CallOption) (*ListThemeResponse, error) {
+	out := new(ListThemeResponse)
+	err := c.cc.Invoke(ctx, "/himo.v1.ThemeManager/List", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ThemeManagerServer is the server API for ThemeManager service.
 // All implementations must embed UnimplementedThemeManagerServer
 // for forward compatibility
 type ThemeManagerServer interface {
 	Create(context.Context, *ThemeRequest) (*ThemeResponse, error)
+	List(context.Context, *ListThemeRequest) (*ListThemeResponse, error)
 	mustEmbedUnimplementedThemeManagerServer()
 }
 
@@ -51,6 +62,9 @@ type UnimplementedThemeManagerServer struct {
 
 func (UnimplementedThemeManagerServer) Create(context.Context, *ThemeRequest) (*ThemeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedThemeManagerServer) List(context.Context, *ListThemeRequest) (*ListThemeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
 func (UnimplementedThemeManagerServer) mustEmbedUnimplementedThemeManagerServer() {}
 
@@ -83,6 +97,24 @@ func _ThemeManager_Create_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ThemeManager_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListThemeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ThemeManagerServer).List(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/himo.v1.ThemeManager/List",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ThemeManagerServer).List(ctx, req.(*ListThemeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ThemeManager_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "himo.v1.ThemeManager",
 	HandlerType: (*ThemeManagerServer)(nil),
@@ -90,6 +122,10 @@ var _ThemeManager_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _ThemeManager_Create_Handler,
+		},
+		{
+			MethodName: "List",
+			Handler:    _ThemeManager_List_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

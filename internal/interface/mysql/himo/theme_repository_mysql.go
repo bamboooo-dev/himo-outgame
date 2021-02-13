@@ -39,3 +39,25 @@ func (t ThemeRepositoryMysql) Create(ctx context.Context, db *gorp.DbMap, user m
 	}
 	return theme, nil
 }
+
+// FetchByUser fetch themes by a user
+func (t ThemeRepositoryMysql) FetchByUser(ctx context.Context, db *gorp.DbMap, user model.User) ([]model.Theme, error) {
+
+	var daoThemes []dao.Theme
+
+	_, err := db.Select(&daoThemes, "SELECT * FROM themes WHERE user_id = ?", user.ID)
+	if err != nil {
+		return []model.Theme{}, err
+	}
+
+	themes := []model.Theme{}
+	for _, daoTheme := range daoThemes {
+		theme := model.Theme{
+			ID:       daoTheme.ID,
+			Sentence: daoTheme.Sentence,
+			Creator:  user,
+		}
+		themes = append(themes, theme)
+	}
+	return themes, nil
+}
