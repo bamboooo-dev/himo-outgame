@@ -19,7 +19,7 @@ func NewGetContentInteractor(r registry.Registry) *GetContentInteractor {
 }
 
 func (g *GetContentInteractor) Call(ctx context.Context, db *gorp.DbMap, userID string) error {
-	user, err := g.userRepo.Find(ctx, db, userID)
+	_, err := g.userRepo.Find(ctx, db, userID)
 	if err != nil {
 		return err
 	}

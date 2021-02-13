@@ -2,6 +2,7 @@ package himo
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/bamboooo-dev/himo-outgame/internal/domain/model"
 	dao "github.com/bamboooo-dev/himo-outgame/internal/interface/dao/himo"
@@ -37,7 +38,11 @@ func (u UserRepositoryMysql) Create(ctx context.Context, db *gorp.DbMap, user mo
 
 // Find finds a user
 func (u UserRepositoryMysql) Find(ctx context.Context, db *gorp.DbMap, id string) (model.User, error) {
-	obj, err := db.Get(dao.User{}, id)
+	queryID, err := strconv.Atoi(id)
+	if err != nil {
+		return model.User{}, err
+	}
+	obj, err := db.Get(dao.User{}, int64(queryID))
 	if err != nil {
 		return model.User{}, err
 	}

@@ -11,6 +11,7 @@ import (
 type Registry interface {
 	Config() *env.Config
 	NewUserRepository() himo_repo.UserRepository
+	NewThemeRepository() himo_repo.ThemeRepository
 }
 
 type registry struct {
@@ -25,6 +26,10 @@ func NewRegistry(cfg *env.Config, l *zap.SugaredLogger) Registry {
 
 func (r *registry) NewUserRepository() himo_repo.UserRepository {
 	return himo_mysql.NewUserRepositoryMysql(r.l)
+}
+
+func (r *registry) NewThemeRepository() himo_repo.ThemeRepository {
+	return himo_mysql.NewThemeRepositoryMysql(r.l)
 }
 
 func (r *registry) Config() *env.Config {
