@@ -14,3 +14,8 @@ message SignUpRequest {
 
 message SignUpResponse {
 }
+
+message User {
+  uint32 id = 1;
+  string nickname = 2;
+}
