@@ -19,6 +19,7 @@ message ListHistoryResponse {
 }
 
 message History {
-  google.protobuf.Timestamp createAt = 1;
+  google.protobuf.Timestamp createdAt = 1;
   repeated User withUsers = 2;
+  uint32 id = 3;
 }

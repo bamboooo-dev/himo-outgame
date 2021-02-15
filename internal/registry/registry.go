@@ -12,6 +12,7 @@ type Registry interface {
 	Config() *env.Config
 	NewUserRepository() himo_repo.UserRepository
 	NewThemeRepository() himo_repo.ThemeRepository
+	NewHistoryRepository() himo_repo.HistoryRepository
 }
 
 type registry struct {
@@ -30,6 +31,10 @@ func (r *registry) NewUserRepository() himo_repo.UserRepository {
 
 func (r *registry) NewThemeRepository() himo_repo.ThemeRepository {
 	return himo_mysql.NewThemeRepositoryMysql(r.l)
+}
+
+func (r *registry) NewHistoryRepository() himo_repo.HistoryRepository {
+	return himo_mysql.NewHistoryRepositoryMysql(r.l)
 }
 
 func (r *registry) Config() *env.Config {

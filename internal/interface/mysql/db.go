@@ -20,6 +20,8 @@ type Config struct {
 	Database string `yaml:"database"`
 	User     string `yaml:"user"`
 	Password string `yaml:"password"`
+
+	ParseTime bool `yaml:"parseTime"`
 }
 
 // NewDB is the sql.DB constructor.
@@ -38,6 +40,8 @@ func NewDB(cfg Config) (*gorp.DbMap, error) {
 
 	dbmap.AddTableWithName(dao.User{}, "users").SetKeys(true, "ID")
 	dbmap.AddTableWithName(dao.Theme{}, "themes").SetKeys(true, "ID")
+	dbmap.AddTableWithName(dao.History{}, "histories").SetKeys(true, "ID")
+	dbmap.AddTableWithName(dao.UserHistory{}, "user_histories")
 
 	if err := dbmap.CreateTablesIfNotExists(); err != nil {
 		return nil, err
@@ -73,6 +77,7 @@ func buildConnectionString(cfg Config) (string, error) {
 	mysqlCfg.User = cfg.User
 	mysqlCfg.Passwd = cfg.Password
 
+	mysqlCfg.ParseTime = cfg.ParseTime
 	ret := mysqlCfg.FormatDSN()
 	return ret, nil
 }

@@ -79,6 +79,7 @@ func main() {
 	pb.RegisterRoomServer(server, handler.NewRoomServer(registry, himoDB))
 	pb.RegisterUserManagerServer(server, handler.NewUserManagerServer(sugar, registry, himoDB))
 	pb.RegisterThemeManagerServer(server, handler.NewThemeManagerServer(sugar, registry, himoDB))
+	pb.RegisterHistoryManagerServer(server, handler.NewHistoryManagerServer(sugar, registry, himoDB))
 	err = server.Serve(lis)
 	if err != nil {
 		panic(err)
