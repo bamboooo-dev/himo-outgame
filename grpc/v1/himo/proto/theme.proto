@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package himo.v1;
+
+option go_package = "github.com/bamboooo-dev/himo/pkg/grpc/v1/himo/proto";
+
+service ThemeManager {
+  rpc Create (ThemeRequest) returns (ThemeResponse) {}
+  rpc List (ListThemeRequest) returns (ListThemeResponse) {}
+}
+
+message Theme {
+  uint32 id = 1;
+  string sentence = 2;
+}
+
+message ThemeRequest {
+  string sentence = 1;
+}
+
+message ThemeResponse {
+  Theme theme = 1;
+}
+
+message ListThemeRequest {}
+
+message ListThemeResponse {
+  repeated Theme themes = 1;
+}

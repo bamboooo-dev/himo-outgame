@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package himo.v1;
+
+option go_package = "github.com/bamboooo-dev/himo/pkg/grpc/v1/himo/proto";
+
+import "google/protobuf/timestamp.proto";
+import "grpc/v1/himo/proto/user.proto";
+
+service HistoryManager {
+  rpc List (ListHistoryRequest) returns (ListHistoryResponse) {}
+}
+
+message ListHistoryRequest {
+}
+
+message ListHistoryResponse {
+  repeated History histories = 1;
+}
+
+message History {
+  google.protobuf.Timestamp createdAt = 1;
+  repeated User withUsers = 2;
+  uint32 id = 3;
+}
