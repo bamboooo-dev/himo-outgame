@@ -9,6 +9,8 @@ services:
     container_name: himo_db
     environment:
       MYSQL_ROOT_PASSWORD: root
+    networks:
+      - himo_links
   outgame:
     image: bamboooo/himo-outgame
     entrypoint: "./bin/outgame"
@@ -16,3 +18,11 @@ services:
     restart: always
     ports:
       - "5502:5502"
+    depends_on:
+      - db
+    networks:
+      - himo_links
+
+networks:
+  himo_links:
+    external: true
