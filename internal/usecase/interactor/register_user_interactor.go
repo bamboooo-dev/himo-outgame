@@ -3,6 +3,7 @@ package interactor
 import (
 	"context"
 	"strconv"
+	"time"
 
 	"github.com/bamboooo-dev/himo-outgame/internal/domain/model"
 	"github.com/bamboooo-dev/himo-outgame/internal/registry"
@@ -38,6 +39,10 @@ func (r *RegisterUserInteractor) Call(ctx context.Context, db *gorp.DbMap, nickN
 	signKey := []byte("secret")
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), grpcmiddleware.AuthClaim{
 		UserID: strconv.Itoa(int(user.ID)),
+		StandardClaims: jwt.StandardClaims{
+			// 1年後
+			ExpiresAt: time.Now().AddDate(1, 0, 0).Unix(),
+		},
 	})
 	ss, err := token.SignedString(signKey)
 	if err != nil {
