@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS himo;
 
 USE himo;
 
-DROP TABLE themes;
+DROP TABLE IF EXISTS themes;
 
 CREATE TABLE themes
 (
