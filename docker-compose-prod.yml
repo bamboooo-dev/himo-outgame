@@ -13,7 +13,9 @@ services:
     networks:
       - himo_links
   outgame:
-    image: bamboooo/himo-outgame
+    build:
+      context: .
+      dockerfile: Dockerfile
     entrypoint: "./bin/outgame"
     env_file: ./.envrc.docker.local
     restart: always
