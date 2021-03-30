@@ -2,6 +2,7 @@ package interactor
 
 import (
 	"context"
+	"os"
 	"strconv"
 	"time"
 
@@ -35,8 +36,7 @@ func (r *RegisterUserInteractor) Call(ctx context.Context, db *gorp.DbMap, nickN
 		return "", err
 	}
 
-	// TODO: signKey をわからないようにする
-	signKey := []byte("secret")
+	signKey := []byte(os.Getenv("JWT_SECRET"))
 	token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), grpcmiddleware.AuthClaim{
 		UserID: strconv.Itoa(int(user.ID)),
 		StandardClaims: jwt.StandardClaims{

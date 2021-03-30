@@ -2,6 +2,7 @@ package grpcmiddleware
 
 import (
 	"context"
+	"os"
 
 	"github.com/dgrijalva/jwt-go"
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
@@ -27,7 +28,7 @@ func Authenticate(ctx context.Context) (context.Context, error) {
 
 	claim := AuthClaim{}
 	_, err = jwt.ParseWithClaims(tokenString, &claim, func(token *jwt.Token) (interface{}, error) {
-		return []byte("secret"), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 	if err != nil {
 		return nil, err
