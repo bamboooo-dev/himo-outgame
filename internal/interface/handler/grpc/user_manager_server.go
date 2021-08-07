@@ -17,6 +17,7 @@ import (
 type UserManagerServer struct {
 	logger   *zap.SugaredLogger
 	register *interactor.RegisterUserInteractor
+	updater  *interactor.UpdateUserInteractor
 	db       *gorp.DbMap
 
 	pb.UnimplementedUserManagerServer
@@ -27,6 +28,7 @@ func NewUserManagerServer(l *zap.SugaredLogger, r registry.Registry, db *gorp.Db
 	return UserManagerServer{
 		logger:   l,
 		register: interactor.NewRegistUserInteractor(r),
+		updater:  interactor.NewUpdateUserInteractor(r),
 		db:       db,
 	}
 }
@@ -43,6 +45,18 @@ func (s UserManagerServer) SignUp(ctx context.Context, req *pb.SignUpRequest) (*
 	grpc.SendHeader(ctx, header)
 	ret := pb.SignUpResponse{}
 	return &ret, nil
+}
+
+func (s UserManagerServer) UpdateUserName(ctx context.Context, req *pb.UpdateUserNameRequest) (*pb.UpdateUserNameResponse, error) {
+	nickname := req.GetNickname()
+	userID := ctx.Value(grpcmiddleware.StringKey).(int64)
+	err := s.updater.Call(ctx, s.db, nickname, userID)
+	if err != nil {
+		return nil, err
+	}
+	ret := pb.UpdateUserNameResponse{}
+	return &ret, nil
+
 }
 
 // AuthFuncOverride is to handle authentication

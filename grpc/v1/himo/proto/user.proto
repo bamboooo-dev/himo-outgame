@@ -15,6 +15,13 @@ message SignUpRequest {
 message SignUpResponse {
 }
 
+message UpdateUserNameRequest {
+  string nickname = 1;
+}
+
+message UpdateUserNameResponse {
+  
+} 
 message User {
   uint32 id = 1;
   string nickname = 2;
