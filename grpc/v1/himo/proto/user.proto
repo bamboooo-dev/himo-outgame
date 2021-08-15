@@ -6,7 +6,7 @@ option go_package = "github.com/bamboooo-dev/himo/pkg/grpc/v1/himo/proto";
 
 service UserManager {
   rpc SignUp (SignUpRequest) returns (SignUpResponse) {}
-  rpc Update (UpdateUserNameRequest) returns (UpdateUserNameResponse) {}
+  rpc UpdateUserName (UpdateUserNameRequest) returns (UpdateUserNameResponse) {}
 }
 
 message SignUpRequest {
