@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // UserManagerClient is the client API for UserManager service.
@@ -18,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserManagerClient interface {
 	SignUp(ctx context.Context, in *SignUpRequest, opts ...grpc.CallOption) (*SignUpResponse, error)
+	UpdateUserName(ctx context.Context, in *UpdateUserNameRequest, opts ...grpc.CallOption) (*UpdateUserNameResponse, error)
 }
 
 type userManagerClient struct {
@@ -37,11 +39,21 @@ func (c *userManagerClient) SignUp(ctx context.Context, in *SignUpRequest, opts 
 	return out, nil
 }
 
+func (c *userManagerClient) UpdateUserName(ctx context.Context, in *UpdateUserNameRequest, opts ...grpc.CallOption) (*UpdateUserNameResponse, error) {
+	out := new(UpdateUserNameResponse)
+	err := c.cc.Invoke(ctx, "/himo.v1.UserManager/UpdateUserName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserManagerServer is the server API for UserManager service.
 // All implementations must embed UnimplementedUserManagerServer
 // for forward compatibility
 type UserManagerServer interface {
 	SignUp(context.Context, *SignUpRequest) (*SignUpResponse, error)
+	UpdateUserName(context.Context, *UpdateUserNameRequest) (*UpdateUserNameResponse, error)
 	mustEmbedUnimplementedUserManagerServer()
 }
 
@@ -51,6 +63,9 @@ type UnimplementedUserManagerServer struct {
 
 func (UnimplementedUserManagerServer) SignUp(context.Context, *SignUpRequest) (*SignUpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignUp not implemented")
+}
+func (UnimplementedUserManagerServer) UpdateUserName(context.Context, *UpdateUserNameRequest) (*UpdateUserNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserName not implemented")
 }
 func (UnimplementedUserManagerServer) mustEmbedUnimplementedUserManagerServer() {}
 
@@ -62,7 +77,7 @@ type UnsafeUserManagerServer interface {
 }
 
 func RegisterUserManagerServer(s grpc.ServiceRegistrar, srv UserManagerServer) {
-	s.RegisterService(&_UserManager_serviceDesc, srv)
+	s.RegisterService(&UserManager_ServiceDesc, srv)
 }
 
 func _UserManager_SignUp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -83,13 +98,38 @@ func _UserManager_SignUp_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-var _UserManager_serviceDesc = grpc.ServiceDesc{
+func _UserManager_UpdateUserName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserManagerServer).UpdateUserName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/himo.v1.UserManager/UpdateUserName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserManagerServer).UpdateUserName(ctx, req.(*UpdateUserNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// UserManager_ServiceDesc is the grpc.ServiceDesc for UserManager service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var UserManager_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "himo.v1.UserManager",
 	HandlerType: (*UserManagerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "SignUp",
 			Handler:    _UserManager_SignUp_Handler,
+		},
+		{
+			MethodName: "UpdateUserName",
+			Handler:    _UserManager_UpdateUserName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
