@@ -49,7 +49,7 @@ func (s UserManagerServer) SignUp(ctx context.Context, req *pb.SignUpRequest) (*
 
 func (s UserManagerServer) UpdateUserName(ctx context.Context, req *pb.UpdateUserNameRequest) (*pb.UpdateUserNameResponse, error) {
 	nickname := req.GetNickname()
-	userID := ctx.Value(grpcmiddleware.StringKey).(int64)
+	userID := ctx.Value(grpcmiddleware.StringKey).(string)
 	err := s.updater.Call(ctx, s.db, nickname, userID)
 	if err != nil {
 		return nil, err

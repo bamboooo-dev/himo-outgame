@@ -2,7 +2,7 @@ package interactor
 
 import (
 	"context"
-
+	"strconv"
 	"github.com/bamboooo-dev/himo-outgame/internal/domain/model"
 	"github.com/bamboooo-dev/himo-outgame/internal/registry"
 	himo_repo "github.com/bamboooo-dev/himo-outgame/internal/usecase/repository/himo"
@@ -21,11 +21,15 @@ func NewUpdateUserInteractor(r registry.Registry) *UpdateUserInteractor {
 	}
 }
 
-func (u *UpdateUserInteractor) Call(ctx context.Context, db *gorp.DbMap, nickName string, userID int64) error {
+func (u *UpdateUserInteractor) Call(ctx context.Context, db *gorp.DbMap, nickName string, userID string) error {
+	intUserID, err := strconv.ParseInt(userID, 10, 64)
+	if err != nil {
+		return err
+	}
 	user := model.User{
 		Nickname: nickName,
-		ID:       userID}
-	user, err := u.userRepo.Update(ctx, db, user)
+		ID:       intUserID}
+	_ , err = u.userRepo.Update(ctx, db, user)
 	if err != nil {
 		return err
 	}
