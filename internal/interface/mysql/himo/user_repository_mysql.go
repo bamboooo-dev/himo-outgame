@@ -24,8 +24,20 @@ func NewUserRepositoryMysql(l *zap.SugaredLogger) repo.UserRepository {
 // Create inserts new user
 func (u UserRepositoryMysql) Create(ctx context.Context, db *gorp.DbMap, user model.User) (model.User, error) {
 	userDAO := &dao.User{Nickname: user.Nickname}
-
 	err := db.Insert(userDAO)
+	if err != nil {
+		return model.User{}, err
+	}
+
+	user = model.User{
+		ID:       userDAO.ID,
+		Nickname: userDAO.Nickname}
+	return user, nil
+}
+
+func (u UserRepositoryMysql) Update(ctx context.Context, db *gorp.DbMap, user model.User) (model.User, error) {
+	userDAO := &dao.User{Nickname: user.Nickname, ID: user.ID}
+	_, err := db.Update(userDAO)
 	if err != nil {
 		return model.User{}, err
 	}
