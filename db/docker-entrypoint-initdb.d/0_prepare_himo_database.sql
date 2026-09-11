@@ -6,8 +6,10 @@ DROP TABLE IF EXISTS themes;
 
 CREATE TABLE themes
 (
-  id           BIGINT NOT NULL PRIMARY KEY,
-  sentence     VARCHAR(100) NOT NULL
+  id           BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  sentence     VARCHAR(100) NOT NULL,
+  -- お題を作ったユーザー。初期データ(共通お題)は 0
+  user_id      BIGINT NOT NULL DEFAULT 0
 );
 
 INSERT INTO themes (id, sentence) VALUES

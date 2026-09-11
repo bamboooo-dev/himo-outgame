@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"net/http"
 
 	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	"go.uber.org/zap"
@@ -11,6 +12,7 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	handler "github.com/bamboooo-dev/himo-outgame/internal/interface/handler/grpc"
+	webhandler "github.com/bamboooo-dev/himo-outgame/internal/interface/handler/http"
 	"github.com/bamboooo-dev/himo-outgame/internal/interface/mysql"
 	"github.com/bamboooo-dev/himo-outgame/internal/registry"
 	"github.com/bamboooo-dev/himo-outgame/pkg/env"
@@ -69,6 +71,16 @@ func main() {
 	reflection.Register(server)
 
 	registry := registry.NewRegistry(cfg, sugar)
+
+	// Web クライアント向けの JSON API (:5503)。ブラウザは gRPC を直接叩けないため
+	mux := http.NewServeMux()
+	webhandler.NewUserHandler(sugar, registry, himoDB).Register(mux)
+	go func() {
+		sugar.Info("started to listen HTTP :5503")
+		if err := http.ListenAndServe("0.0.0.0:5503", mux); err != nil {
+			sugar.Error(err)
+		}
+	}()
 
 	pb.RegisterRoomServer(server, handler.NewRoomServer(registry, himoDB))
 	pb.RegisterUserManagerServer(server, handler.NewUserManagerServer(sugar, registry, himoDB))
